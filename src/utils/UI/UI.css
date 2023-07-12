@@ -1,0 +1,32 @@
+.text_title {
+  margin: 0;
+  font-weight: 400;
+  font-size: 50px;
+  line-height: calc(58 / 50);
+}
+
+.subtitle__text {
+  width: 100%;
+  border-bottom: 1px solid rgba(218, 218, 218, 1);
+  margin-bottom: 0;
+  padding-bottom: 22px;
+  margin: 0;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: calc(24 / 20);
+}
+
+.link {
+  text-decoration: none;
+  color: white;
+  transition: opacity 0.6s;
+  font-size: 14px;
+}
+
+@media screen and (max-width: 600px) {
+  .subtitle__text {
+    font-size: 18px;
+    padding-bottom: 28px;
+  }
+  
+}

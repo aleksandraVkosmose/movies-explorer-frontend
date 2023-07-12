@@ -1,0 +1,33 @@
+.promo__list {
+    width: 100%;
+    background-color: #272727;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    list-style-type: none;
+    gap: 40px;
+    padding: 24px 0;
+    margin: 0;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: calc(18 / 12);
+}
+
+.promo__list-item {
+    width: 75px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+}
+
+@media screen and (max-width: 320px) {
+    .promo__list {
+        font-size: 11px;
+        padding: 24px 0;
+        gap: 24px;
+    }
+
+    .promo__list-item {
+        width: 64px;
+    }
+}
