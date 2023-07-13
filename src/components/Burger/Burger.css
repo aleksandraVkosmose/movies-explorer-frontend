@@ -1,0 +1,24 @@
+.burger-box {
+    position: absolute;
+    top: 0;
+    right: 0;
+    max-width: 1280px;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: flex-end;
+    z-index: 2;
+}
+
+.burger-box_off {
+    display: none;
+}
+
+.burger {
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+}
