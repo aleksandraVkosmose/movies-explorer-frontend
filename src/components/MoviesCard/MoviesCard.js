@@ -15,7 +15,7 @@ import pic12 from "../../images/pic12.svg"
 function MoviesCard() {
     return (
         <ul className="movies__card">
-            <li className="movies__card">
+            <li className="movies__card-item">
                 <a href={"/movies"}>
                     <img className="movies__card-image" src={pic1} alt="карточка фильма"></img>
                 </a>
@@ -27,7 +27,7 @@ function MoviesCard() {
                     <p className="movies__card-movie-time">1ч 47м</p>
                 </div>
             </li>
-            <li className="movies__card">
+            <li className="movies__card-item">
                 <a href={"/movies"}>
                     <img className="movies__card-image" src={pic2} alt="карточка фильма"></img>
                 </a>
@@ -39,7 +39,7 @@ function MoviesCard() {
                     <p className="movies__card-movie-time">1ч 3м</p>
                 </div>
             </li>
-            <li className="movies__card">
+            <li className="movies__card-item">
                 <a href={"/movies"}>
                     <img className="movies__card-image" src={pic3} alt="карточка фильма"></img>
                 </a>
@@ -51,7 +51,7 @@ function MoviesCard() {
                     <p className="movies__card-movie-time">1ч 42м</p>
                 </div>
             </li>
-            <li className="movies__card">
+            <li className="movies__card-item">
                 <a href={"/movies"}>
                     <img className="movies__card-image" src={pic4} alt="карточка фильма"></img>
                 </a>
@@ -63,7 +63,7 @@ function MoviesCard() {
                     <p className="movies__card-movie-time">1ч 21м</p>
                 </div>
             </li>
-            <li className="movies__card">
+            <li className="movies__card-item">
                 <a href={"/movies"}>
                     <img className="movies__card-image" src={pic5} alt="карточка фильма"></img>
                 </a>
@@ -75,7 +75,7 @@ function MoviesCard() {
                     <p className="movies__card-movie-time">1ч 44м</p>
                 </div>
             </li>
-            <li className="movies__card">
+            <li className="movies__card-item">
                 <a href={"/movies"}>
                     <img className="movies__card-image" src={pic6} alt="карточка фильма"></img>
                 </a>
@@ -87,7 +87,7 @@ function MoviesCard() {
                     <p className="movies__card-movie-time">1ч 37м</p>
                 </div>
             </li>
-            <li className="movies__card">
+            <li className="movies__card-item">
                 <a href={"/movies"}>
                     <img className="movies__card-image" src={pic7} alt="карточка фильма"></img>
                 </a>
@@ -99,7 +99,7 @@ function MoviesCard() {
                     <p className="movies__card-movie-time">1ч 56м</p>
                 </div>
             </li>
-            <li className="movies__card">
+            <li className="movies__card-item">
                 <a href={"/movies"}>
                     <img className="movies__card-image" src={pic8} alt="карточка фильма"></img>
                 </a>
@@ -111,7 +111,7 @@ function MoviesCard() {
                     <p className="movies__card-movie-time">1ч 59м</p>
                 </div>
             </li>
-            <li className="movies__card">
+            <li className="movies__card-item">
                 <a href={"/movies"}>
                     <img className="movies__card-image" src={pic9} alt="карточка фильма"></img>
                 </a>
@@ -123,7 +123,7 @@ function MoviesCard() {
                     <p className="movies__card-movie-time">1ч 42м</p>
                 </div>
             </li>
-            <li className="movies__card">
+            <li className="movies__card-item">
                 <a href={"/movies"}>
                     <img className="movies__card-image" src={pic10} alt="карточка фильма"></img>
                 </a>
@@ -135,7 +135,7 @@ function MoviesCard() {
                     <p className="movies__card-movie-time">1ч 10м</p>
                 </div>
             </li>
-            <li className="movies__card">
+            <li className="movies__card-item">
                 <a href={"/movies"}>
                     <img className="movies__card-image" src={pic11} alt="карточка фильма"></img>
                 </a>
@@ -147,7 +147,7 @@ function MoviesCard() {
                     <p className="movies__card-movie-time">1ч 4м</p>
                 </div>
             </li>
-            <li className="movies__card">
+            <li className="movies__card-item">
                 <a href={"/movies"}>
                     <img className="movies__card-image" src={pic12} alt="карточка фильма"></img>
                 </a>

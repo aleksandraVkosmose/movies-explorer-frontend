@@ -13,7 +13,7 @@ function AboutProject() {
           </p>
         </li>
         <li className='project__about-list'>
-          <h3 className="project__about-title subtitle_text">
+          <h3 className="project__about-title">
             На выполнение диплома ушло 5 недель
           </h3>
           <p className="project__about-text">

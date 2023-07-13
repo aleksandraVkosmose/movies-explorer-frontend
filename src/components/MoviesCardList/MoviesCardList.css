@@ -27,13 +27,23 @@
   border-color: #2F2F2F;
   border-style: double;
   border-radius: 6px;
+  cursor: pointer;
 }
 
-@media (max-width: 1124px) {
+@media (max-width: 1130px) {
   .movies__card {
-    max-width: 708px;
-    grid-template-columns: repeat(2, 340px);
+     max-width: 732px;
+    /*grid-template-columns: repeat(2, 340px);
     column-gap: 24px;
+    gap: 33px 26px; */
+  }
+}
+
+@media (max-width: 880px) {
+  .movies__card {
+    max-width: 732px;
+    /* grid-template-columns: repeat(2, 340px); */
+    /* column-gap: 24px; */
     gap: 33px 26px;
   }
 }

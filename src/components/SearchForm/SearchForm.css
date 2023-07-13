@@ -36,6 +36,7 @@
   color: #8B8B8B;
   outline: 1px #AAA;
   display: block;
+  cursor: pointer;
 }
 
 .searchform__button {
@@ -51,6 +52,10 @@
   border-radius: 5px;
   background-color: #4285F4;
   cursor: pointer;
+}
+
+.searchform__button:hover {
+  opacity: 0.699999988079071;
 }
 
 .searchform__addition {
