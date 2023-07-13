@@ -4,12 +4,12 @@ import React from "react";
 function Footer() {
   return (
     <footer className="footer">
-      <h3 className="footer__title text">
+      <h3 className="footer__title">
         Учебный проект Яндекс.Практикум х BeatFilm.
       </h3>
       <div className="footer__row">
         <p className="footer__autor">© 2022</p>
-        <ul className="footer__list text">
+        <ul className="footer__list">
           <li>
             <a
               href="https://practicum.yandex.ru/profile/web"

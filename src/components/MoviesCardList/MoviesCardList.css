@@ -1,4 +1,4 @@
-.movies__cardlist {
+.movies__card {
   width: 100%;
   margin: 0 auto;
   max-width: 1140px;
@@ -8,14 +8,13 @@
   padding: 80px 0 0;
 }
 
-.button__container {
+.cardList__button {
   display: flex;
   margin: 0 auto;
 }
 
 .movies__more-films {
   margin: 50px auto 80px;
-  /* margin: 0 auto; */
   padding: 11px 60px 9px;
   text-align: center;
   min-width: 240px;
@@ -31,7 +30,7 @@
 }
 
 @media (max-width: 1124px) {
-  .movies__cardlist {
+  .movies__card {
     max-width: 708px;
     grid-template-columns: repeat(2, 340px);
     column-gap: 24px;
@@ -40,7 +39,7 @@
 }
 
 @media (max-width: 706px) {
-  .movies__cardlist {
+  .movies__card {
     max-width: 300px;
     grid-template-columns: repeat(1, 300px);
     gap: 15px;

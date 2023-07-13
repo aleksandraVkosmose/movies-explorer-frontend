@@ -30,23 +30,20 @@
     border-bottom: 1px solid #424242;
 }
 
-.portfolio__list-item:nth-last-of-type(1) {
-    border-bottom: 0;
-}
-
-.portfolio__list-item::after {
+.portfolio__link-arrow{
     position: absolute;
-    content: "";
     right: 0;
     top: 50%;
     width: 25px;
     height: 25px;
-    transform: translate(0%, -50%);
     background-image: url("../../images/arrow.svg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-    pointer-events: none;
+}
+
+.portfolio__list-item:nth-last-of-type(1) {
+    border-bottom: 0;
 }
 
 @media screen and (max-width: 768px) {
@@ -68,7 +65,7 @@
         font-size: 18px;
     }
 
-    .portfolio__list-item::after {
+    .portfolio__link-arrow{
         width: 18px;
         height: 28px;
     }

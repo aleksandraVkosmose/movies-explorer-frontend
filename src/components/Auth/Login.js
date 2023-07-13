@@ -30,7 +30,7 @@ function Login() {
                 Войти
             </button>
             <div className="auth__link-container">
-                <p className="auth__text">Ещё не зарегистрированы?</p>
+                <p className="auth__link-text">Ещё не зарегистрированы?</p>
                 <Link to="/signup" className="auth__link">
                     Регистрация
                 </Link>

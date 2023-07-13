@@ -12,7 +12,7 @@ function SearchForm() {
                 </form>
                 <div className="searchform__addition">
                     <label className="searchform__label" htmlFor="short-films">
-                        <input className="searchform__checkbox" id="short-films" type="checkbox" />
+                        <input className="searchform__checkbox" id="short-films" type="checkbox" required/>
                         {/* <label className="searchform__label"></label> */}
                         <span className="searchform__text"></span>
                     </label>

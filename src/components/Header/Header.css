@@ -133,6 +133,7 @@
 }
 
 .header__btn-signin {
+  color: black;
   margin-left: 30px;
   border-radius: 3px;
   background: #2be080;

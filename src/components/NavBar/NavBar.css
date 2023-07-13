@@ -1,4 +1,4 @@
-.promo__list {
+.navBar__list {
     width: 100%;
     background-color: #272727;
     justify-content: center;
@@ -13,21 +13,22 @@
     line-height: calc(18 / 12);
 }
 
-.promo__list-item {
+.navBar__list-item {
     width: 75px;
     display: flex;
     text-align: center;
     align-items: center;
+    cursor: pointer;
 }
 
 @media screen and (max-width: 320px) {
-    .promo__list {
+    .navBar__list {
         font-size: 11px;
         padding: 24px 0;
         gap: 24px;
     }
 
-    .promo__list-item {
+    .navBar__list-item {
         width: 64px;
     }
 }

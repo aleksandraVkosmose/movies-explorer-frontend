@@ -39,6 +39,10 @@
 }
 
 .searchform__button {
+  all: unset;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
   width: 100px;
   height: 52px;
   margin: 10px 0;
@@ -46,6 +50,7 @@
   padding: 0;
   border-radius: 5px;
   background-color: #4285F4;
+  cursor: pointer;
 }
 
 .searchform__addition {
@@ -123,12 +128,6 @@
   .searchform {
     max-width: 708px;
     margin: auto;
-  }
-}
-
-@media screen and (min-width: 661px) and (max-width: 879px) {
-  .searchform {
-    max-width: 500px;
   }
 }
 

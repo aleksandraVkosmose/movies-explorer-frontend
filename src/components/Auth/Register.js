@@ -33,7 +33,7 @@ function Register() {
                 Зарегистрироваться
             </button>
             <div className="auth__link-container">
-                <p className="auth__text">Уже зарегестрированны?</p>
+                <p className="auth__link-text">Уже зарегестрированны?</p>
                 <Link to="/signin" className="auth__link">
                     Войти
                 </Link>

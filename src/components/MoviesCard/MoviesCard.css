@@ -11,11 +11,9 @@
     width: 360px;
     height: 203px;
     object-fit: cover;
-    border-radius: 6px;
-    background-color: #A0A0A0;
 }
 
-.movies__container {
+.movies__card-container {
     /* padding: 16px 0 0 0;
     display: flex;
     justify-content: space-between;
@@ -31,7 +29,7 @@
     box-sizing: border-box;
 }
 
-.movies__subcontainer {
+.movies__card-subcontainer {
     display: flex;
     justify-content: space-between;
     align-items: center;

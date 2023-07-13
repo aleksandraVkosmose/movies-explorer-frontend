@@ -51,11 +51,12 @@
   margin: 0;
 }
 
-.color_primary {
+.project__duration-primary {
+  color: black;
   background-color: #3ddc84;
 }
 
-.color_secondary {
+.project__duration-secondary {
   background-color: #303030;
 }
 
