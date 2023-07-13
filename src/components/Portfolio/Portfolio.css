@@ -33,7 +33,7 @@
 .portfolio__link-arrow{
     position: absolute;
     right: 0;
-    top: 50%;
+    top: 35%;
     width: 25px;
     height: 25px;
     background-image: url("../../images/arrow.svg");
