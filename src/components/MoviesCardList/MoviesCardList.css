@@ -13,6 +13,10 @@
   margin: 0 auto;
 }
 
+.cardList__empty {
+  text-align: center;
+}
+
 .movies__more-films {
   margin: 50px auto 80px;
   padding: 11px 60px 9px;

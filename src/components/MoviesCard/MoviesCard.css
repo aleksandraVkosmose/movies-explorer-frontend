@@ -72,6 +72,10 @@
     padding: 0;
 }
 
+.card__favorite_liked {
+    background: red;
+}
+
 @media screen and (max-width: 880px) {
     .movies__card-image {
         width: 340px;
