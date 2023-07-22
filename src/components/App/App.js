@@ -90,7 +90,6 @@ function App() {
   const loadLiked = useCallback(async() => {
     try {
       const liked = await mainApi.getMovies();
-      console.log(liked)
       setLikedMovies(liked);
     } catch (e) {
       console.error(e);
