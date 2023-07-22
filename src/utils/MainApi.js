@@ -69,8 +69,8 @@ class MainApi {
   }
   
   const mainApi = new MainApi({
-    // baseUrl: "https://api.moviesalexandera.nomoredomains.work",
-    baseUrl: "http://localhost:3000",
+    baseUrl: "https://api.moviesalexandera.nomoredomains.work",
+    // baseUrl: "http://localhost:3000",
     headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem('jwt')}`

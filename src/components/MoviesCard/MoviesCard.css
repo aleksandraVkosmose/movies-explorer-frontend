@@ -66,14 +66,13 @@
     background-repeat: no-repeat;
     background-position: center;
     background-color: #222;
-    /* background-size: 40%; */
     border: none;
     cursor: pointer;
     padding: 0;
 }
 
 .card__favorite_liked {
-    background: red;
+    background-image: url(../../images/like-red.svg);
 }
 
 @media screen and (max-width: 880px) {
