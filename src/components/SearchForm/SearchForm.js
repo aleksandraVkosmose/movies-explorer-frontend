@@ -1,44 +1,52 @@
 import React, { useState, useEffect } from "react";
 
 
-function SearchForm({ onSubmit, onShortChange }) {
+function SearchForm({ onSubmit, onShortChange, saveData }) {
     const [search ,setSearch] = useState('');
     const [shortDuration, setShortDuration] = useState(false);
-    console.log(shortDuration)
+
     useEffect(() => {
-    const storedSearchQuery = localStorage.getItem('searchQuery');
-    const storedShortDuration = localStorage.getItem('shortDuration');
+        if (!saveData) {
+            return;
+        }
 
-    if (storedSearchQuery) {
-      setSearch(storedSearchQuery);
-    }
+        const storedSearchQuery = localStorage.getItem('searchQuery');
+        const storedShortDuration = localStorage.getItem('shortDuration');
+        console.log(storedShortDuration === 'true');
 
-    if (storedShortDuration) {
-      setShortDuration(storedShortDuration === 'true');
-    }
-  }, []);
+        if (storedSearchQuery || storedSearchQuery === '') {
+            onSubmit(storedSearchQuery);
+            setSearch(storedSearchQuery);
+        }
 
-  useEffect(() => {
-    localStorage.setItem('searchQuery', search);
-  }, [search]);
+        if (storedShortDuration) {
+            setShortDuration(storedShortDuration === 'true');
+            onShortChange(storedShortDuration === 'true');
+        }
+    }, []);
 
-  useEffect(() => {
-    localStorage.setItem('shortDuration', JSON.stringify(shortDuration));
-  }, [shortDuration]);
-    
     const handleOnSubmit = (e) => {
         e.preventDefault();
         onSubmit(search);
     }
 
     const handleOnChange = (e) => {
-        setSearch(e.target.value);
+        const value = e.target.value;
+        setSearch(value);
+
+        if (saveData) {
+            localStorage.setItem('searchQuery', value);
+        }
     }
 
     const handleOnShortClick = () => {
         const newValue = !shortDuration;
         setShortDuration(newValue);
         onShortChange(newValue);
+
+        if (saveData) {
+            localStorage.setItem('shortDuration', newValue);
+        }
     }
 
     return (

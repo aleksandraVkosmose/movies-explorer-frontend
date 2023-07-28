@@ -79,7 +79,7 @@ function Movies({ onLike, onUnLike, likedMovies, loadLiked }) {
     return (
         <section className="movies">
             <Header />
-            <SearchForm onSubmit={setSearch} onShortChange={setShortMovies} />
+            <SearchForm onSubmit={setSearch} onShortChange={setShortMovies} saveData />
             {isLoading && <Preloader />}
             {isLoaded && !isLoading && <MoviesCardList list={searchResults} onUnLike={onUnLike} onLike={onLike} />}
             {error && <div className="movies__error">Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз</div>}
