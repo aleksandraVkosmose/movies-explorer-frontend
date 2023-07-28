@@ -1,12 +1,12 @@
 import React from 'react';
 
-function NavBar() {
+function NavBar({ handleButtonClick }) {
   return (
     <nav className='navBar'>
       <ul className="navBar__list">
-        <li className='navBar__list-item'>О проекте</li>
-        <li className='navBar__list-item'>Технологии</li>
-        <li className='navBar__list-item'>Студент</li>
+        <li className='navBar__list-item' onClick={handleButtonClick} name="aboutProject">О проекте</li>
+        <li className='navBar__list-item' onClick={handleButtonClick} name="techs" >Технологии</li>
+        <li className='navBar__list-item' onClick={handleButtonClick} name="student">Студент</li>
       </ul>
     </nav>
   )

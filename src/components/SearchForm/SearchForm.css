@@ -10,7 +10,7 @@
 
 .searchform__container {
   display: flex;
-  /* justify-content: space-between; */
+
   flex-direction: column;
   margin: 70px auto 44px;
   width: 100%;

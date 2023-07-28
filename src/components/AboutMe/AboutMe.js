@@ -1,9 +1,10 @@
 import React from "react";
+import { forwardRef } from "react";
 import foto from "../../images/aboutMe.png"
 
-function AboutMe() {
+const AboutMe = forwardRef((props, ref) => {
   return (
-    <section className="about">
+    <section className="about" id="student" ref={ref}>
       <h2 className="about__subtitle subtitle_text">Студент</h2>
       <div className="about__info">
         <div className="about__info-description">
@@ -21,5 +22,5 @@ function AboutMe() {
       </div>
     </section>
   )
-}
+})
 export default AboutMe;

@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo, useState} from "react"
 import SearchForm from "../SearchForm/SearchForm";
-import MoviesCardList from "../MoviesCardList/MoviesCardList";
+import SavedMoviesCardList from "../SavedMoviesCardList/SavedMoviesCardList"
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import filterMovies from "../../utils/filterMovies";
@@ -24,7 +24,7 @@ function SavedMovies({ onLike, onUnLike, loadLiked, likedMovies }) {
         <section className="movies">
             <Header />
             <SearchForm onSubmit={setSearch} onShortChange={setShortMovies} />
-            <MoviesCardList list={list} onUnLike={onUnLike} onLike={onLike} />
+            <SavedMoviesCardList list={list} onUnLike={onUnLike} onLike={onLike} />
             <Footer />
         </section>
     )

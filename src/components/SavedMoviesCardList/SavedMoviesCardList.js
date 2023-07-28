@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import MoviesCard from "../MoviesCard/MoviesCard";
+import SavedMoviesCard from "../SavedMoviesCard/SavedMoviesCard";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -21,7 +21,7 @@ function MoviesCardList({ list, onLike, onUnLike }) {
       ) : (
         <ul className="movies__card">
           {paginatedList.map((movie, index) => (
-            <MoviesCard
+            <SavedMoviesCard
               {...movie}
               onLike={onLike}
               onUnLike={onUnLike}

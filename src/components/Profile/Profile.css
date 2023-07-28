@@ -3,6 +3,10 @@
 
 }
 
+.profile__notification{
+color: greenyellow;
+}
+
 .profile__container {
   display: flex;
   max-width: 410px;
@@ -12,6 +16,23 @@
   width: 100%;
   margin: 0 auto;
   padding-top: 74px;
+}
+
+.profile__error {
+  display: block;
+  margin-bottom: 10px;
+  color: #FF004C;
+  font-weight: 400;
+  font-size: 12px;
+  text-align: center;
+}
+
+.profile__span{
+  margin-bottom: 10px;
+  color: #2d8d4a;
+  font-weight: 400;
+  font-size: 12px;
+  text-align: center;
 }
 
 .profile__title {

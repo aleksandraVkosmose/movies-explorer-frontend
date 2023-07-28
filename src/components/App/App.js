@@ -1,17 +1,18 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import CurrentUserContext from '../../contexts/CurrentUserContext';
+import './App.css';
 
 import Main from '../Main/Main';
-import './App.css';
 import Movies from '../Movies/Movies';
+import ProfileContainer from '../Profile/ProfileContainer';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import Register from '../Auth/Register'
-import CurrentUserContext from '../../contexts/CurrentUserContext';
 import Login from '../Auth/Login';
-import Profile from '../Profile/Profile';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import mainApi from '../../utils/MainApi';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import Header from '../Header/Header';
 
 function App() {
   const location = useLocation();
@@ -26,7 +27,15 @@ function App() {
     try {
       const data = await mainApi.register(name, email, password);
       if (data) {
-        navigate("/signin");
+        const loginData = await mainApi.authorize(email, password);
+        if (loginData.token) {
+          localStorage.setItem("jwt", loginData.token);
+          setIsLoggedIn(true);
+          setCurrentUser(loginData.user);
+          navigate("/movies");
+        } else {
+          setIsLoggedIn(false);
+        }
       }
     } catch (e) {
       if (e === "Ошибка:( 409") {
@@ -57,26 +66,13 @@ function App() {
     }
   }, [navigate]);
 
-  const handleOnLogout = useCallback(async () => {
-    setIsLoggedIn(false);
-    navigate("/signin");
-    localStorage.removeItem("jwt");
-  }, [navigate]);
-
-  const handleOnEditProfile = useCallback(async ({email, name}) => {
-    const user = await mainApi.editUser(name, email);
-    setCurrentUser(user);
-    navigate("/profile");
-    setIsLoggedIn(true);
-  }, [navigate])
-
   const checkToken = useCallback(async () => {
     try {
       const jwt = localStorage.getItem("jwt");
-      
+
       if (!jwt) {
         return;
-      } 
+      }
       const user = await mainApi.getUser(jwt);
       setCurrentUser(user);
       setIsLoggedIn(true);
@@ -87,7 +83,7 @@ function App() {
   }, [location, navigate]);
 
 
-  const loadLiked = useCallback(async() => {
+  const loadLiked = useCallback(async () => {
     try {
       const liked = await mainApi.getMovies();
       setLikedMovies(liked);
@@ -127,6 +123,7 @@ function App() {
   return (
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
+        <Header isLoggedIn={isLoggedIn} />
         <Routes>
           <Route path="/"
             element={<Main />}>
@@ -138,38 +135,38 @@ function App() {
             element={<Login onLogin={handleOnLogin} loginError={loginError} />}>
           </Route>
           <Route path="/profile"
-              element={
-                <ProtectedRoute
-                  isLoggedIn={isLoggedIn}
-                  element={<Profile onLogout={handleOnLogout} onEdit={handleOnEditProfile}/>}
-                ></ProtectedRoute>
-              }
-            >
+            element={
+              <ProtectedRoute
+                isLoggedIn={isLoggedIn}
+                element={<ProfileContainer />}
+              ></ProtectedRoute>
+            }
+          >
           </Route>
           <Route path="/movies"
-             element={
+            element={
               <ProtectedRoute
                 isLoggedIn={isLoggedIn}
                 element={
                   <Movies
-                      loadLiked={loadLiked}
-                      onLike={handleOnLikeClick}
-                      onUnLike={handleOnUnLikeClick}
-                      likedMovies={likedMovies}
-                />
+                    loadLiked={loadLiked}
+                    onLike={handleOnLikeClick}
+                    onUnLike={handleOnUnLikeClick}
+                    likedMovies={likedMovies}
+                  />
                 }
               ></ProtectedRoute>
             }>
           </Route>
           <Route path="/saved-movies"
-             element={
+            element={
               <ProtectedRoute
                 isLoggedIn={isLoggedIn}
                 element={
                   <SavedMovies
-                      loadLiked={loadLiked}
-                      likedMovies={likedMovies}
-                      onUnLike={handleOnUnLikeClick}
+                    loadLiked={loadLiked}
+                    likedMovies={likedMovies}
+                    onUnLike={handleOnUnLikeClick}
                   />
                 }
               ></ProtectedRoute>

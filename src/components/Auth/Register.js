@@ -14,7 +14,9 @@ function Register({ onRegister, registerError }) {
     }
     return (
         <div className='auth'>
+            <Link to="/" className="auth__logo">
             <img className="auth__logo" src={logo} alt="Логотип" />
+            </Link>
             <h2 className="auth__title">Добро пожаловать!</h2>
             <form className="auth__form" onSubmit={handleOnRegister}>
                 <div className="auth__input-container">
