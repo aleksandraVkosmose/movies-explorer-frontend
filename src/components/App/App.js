@@ -13,6 +13,8 @@ import PageNotFound from '../PageNotFound/PageNotFound';
 import mainApi from '../../utils/MainApi';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import Header from '../Header/Header';
+import moviesApi from "../../utils/MoviesApi";
+import filterMovies from "../../utils/filterMovies";
 
 function App() {
   const location = useLocation();
@@ -21,6 +23,14 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [likedMovies, setLikedMovies] = useState([]);
+
+  const [search, setSearch] = useState('');
+  const [shortMovies, setShortMovies] = useState(false);
+  const [movies, setMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
   const navigate = useNavigate();
 
   const handleOnRegister = useCallback(async ({ name, email, password }) => {
@@ -92,8 +102,8 @@ function App() {
     }
   }, [])
 
-  const handleOnLikeClick = useCallback(async ({ country, director, duration, year, description, image, trailerLink, nameRU, nameEN, movieId, thumbnail }) => {
-    await mainApi.likeMovie({
+  const handleOnLikeClick = useCallback(
+    async ({
       country,
       director,
       duration,
@@ -104,11 +114,55 @@ function App() {
       nameRU,
       nameEN,
       movieId,
-      thumbnail
-    })
-    await loadLiked();
+      thumbnail,
+    }) => {
+      try {
+        const isLiked = likedMovies.some((movie) => movie.movieId === movieId);
 
-  }, [loadLiked])
+        if (isLiked) {
+          await mainApi.unLikeMovie(movieId);
+
+          setLikedMovies((prevLikedMovies) =>
+            prevLikedMovies.filter((movie) => movie.movieId !== movieId)
+          );
+        } else {
+          await mainApi.likeMovie({
+            country,
+            director,
+            duration,
+            year,
+            description,
+            image,
+            trailerLink,
+            nameRU,
+            nameEN,
+            movieId,
+            thumbnail,
+          });
+
+          setLikedMovies((prevLikedMovies) => [
+            ...prevLikedMovies,
+            {
+              country,
+              director,
+              duration,
+              year,
+              description,
+              image,
+              trailerLink,
+              nameRU,
+              nameEN,
+              movieId,
+              thumbnail,
+            },
+          ]);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [likedMovies]
+  );
 
   const handleOnUnLikeClick = useCallback(async (id) => {
     await mainApi.unLikeMovie(id)
@@ -119,6 +173,65 @@ function App() {
   useEffect(() => {
     checkToken();
   }, [])
+
+  const loadMovies = async () => {
+    try {
+      setError(false);
+      setIsLoading(true);
+      const response = await moviesApi.getMovies();
+      setMovies(response);
+      setIsLoaded(true);
+    } catch (error) {
+      setError(true);
+      console.error('error', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadLiked();
+    loadMovies();
+  }, [loadLiked])
+
+  useEffect(() => {
+    const storedSearchResults = localStorage.getItem('searchResults');
+    if (storedSearchResults) {
+      setSearchResults(JSON.parse(storedSearchResults));
+    }
+  }, []);
+
+  useEffect(() => {
+    const filteredMovies = filterMovies(
+      movies.map(item => {
+        const savedMovie = likedMovies.find(likedMovie => likedMovie.movieId === item.id);
+        return {
+          country: item.country,
+          director: item.director,
+          duration: item.duration,
+          year: item.year,
+          description: item.description,
+          image: moviesApi._baseUrl + item.image.url,
+          thumbnail: moviesApi._baseUrl + item.image.formats.thumbnail.url,
+          trailerLink: item.trailerLink,
+          nameRU: item.nameRU,
+          nameEN: item.nameEN,
+          movieId: item.id,
+          savedMovieId: savedMovie ? savedMovie._id : null,
+          isLiked: !!savedMovie,
+        }
+      }),
+      shortMovies,
+      search
+    );
+
+    setSearchResults(filteredMovies);
+  }, [movies, likedMovies, shortMovies, search]);
+
+  useEffect(() => {
+    localStorage.setItem('searchResults', JSON.stringify(searchResults));
+    localStorage.setItem('shortMovies', JSON.stringify(shortMovies));
+  }, [searchResults, shortMovies]);
 
   return (
     <div className="page">
@@ -153,6 +266,12 @@ function App() {
                     onLike={handleOnLikeClick}
                     onUnLike={handleOnUnLikeClick}
                     likedMovies={likedMovies}
+                    setSearch={setSearch}
+                    searchResults={searchResults}
+                    setShortMovies={setShortMovies}
+                    isLoading={isLoading}
+                    isLoaded={isLoaded}
+                    error={error}
                   />
                 }
               ></ProtectedRoute>
