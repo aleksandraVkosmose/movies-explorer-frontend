@@ -1,81 +1,69 @@
-class MainApi {
-    constructor(options) {
-      this._options = options;
-      this._baseUrl = this._options.baseUrl;
-      this._headers = this._options.headers;
-    }
-  
-    _checkResponse(res) {
-      return res.ok ? res.json() : Promise.reject(`Ошибка:( ${res.status}`);
-    }
+ // const baseUrl: "https://api.moviesalexandera.nomoredomains.work",
+ const baseUrl = "http://localhost:3000";
 
-    register = (name, email, password) => {
-        return fetch(`${this._baseUrl}/signup`, {
-          method: "POST",
-          headers: this._headers,
-          body: JSON.stringify({ name, email, password }),
-        }).then(this._checkResponse);
-      };
+ const headers = {
+   "Content-Type": "application/json",
+   Authorization: `Bearer ${localStorage.getItem('jwt')}`
+ };
 
-    authorize = (email, password) => {
-        return fetch(`${this._baseUrl}/signin`, {
-            method: "POST",
-            headers: this._headers,
-            body: JSON.stringify({ email, password }),
-        }).then(this._checkResponse);
-    };
-
-    editUser = (name, email) => {
-      return fetch(`${this._baseUrl}/users/me`, {
-        method: "PATCH",
-        headers: this._headers,
-        body: JSON.stringify({ name, email })
-      }).then(this._checkResponse);
-    }
-
-    getUser = (jwt) => {
-        return fetch(`${this._baseUrl}/users/me`, {
-            method: "GET",
-            headers: {
-              ...this._headers,
-              Authorization: `Bearer ${jwt}`,
-            },
-          }).then(this._checkResponse);
-    }
-  
-    getMovies() {
-      return fetch(`${this._baseUrl}/movies`, {
-        method: "GET",
-        headers: this._headers,
-      }).then(this._checkResponse);
-    }
-
-    likeMovie({ country, director, duration, year, description, image, trailerLink, nameRU, nameEN, thumbnail, movieId }) {
-        return fetch(`${this._baseUrl}/movies`, {
-            method: "POST",
-            headers: this._headers,
-            body: JSON.stringify({
-                country, director, duration, year, description, image, trailerLink, nameRU, nameEN, thumbnail, movieId
-            })
-          }).then(this._checkResponse);
-    }
-
-    unLikeMovie(id) {
-        return fetch(`${this._baseUrl}/movies/${id}`, {
-            method: "DELETE",
-            headers: this._headers,
-          }).then(this._checkResponse);
-    }
+const checkResponse = (res) => {
+    return res.ok ? res.json() : Promise.reject(`Ошибка:( ${res.status}`);
   }
-  
-  const mainApi = new MainApi({
-    baseUrl: "https://api.moviesalexandera.nomoredomains.work",
-    // baseUrl: "http://localhost:3000",
-    headers: {
+  // Регистрация
+  export const  register = (name, email, password) => {
+    return fetch(`${baseUrl}/signup`, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify({ name, email, password }),
+    }).then(checkResponse);
+  };
+  // Вход
+  export const  authorize = (email, password) => {
+    return fetch(`${baseUrl}/signin`, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify({ email, password }),
+    }).then(checkResponse);
+  };
+  // Редактирование информации о пользователе
+  export const  editUser = (name, email) => {
+    return fetch(`${baseUrl}/users/me`, {
+      method: "PATCH",
+      headers: headers,
+      body: JSON.stringify({ name, email })
+    }).then(checkResponse);
+  }
+  // Получение информации о пользователе с сервера
+  export const getUser = (jwt) => {
+    return fetch(`${baseUrl}/users/me`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem('jwt')}`
-    }
-  });
-  
-  export default mainApi;
+        Authorization: `Bearer ${jwt}`,
+      },
+    }).then(checkResponse);
+  }
+  // Получение карточек с сервера 
+  export const  getSavedMovies = () => {
+    return fetch(`${baseUrl}/movies`, {
+      method: "GET",
+      headers: headers,
+    }).then(checkResponse);
+  }
+  // Ставим лайк карточке
+  export const saveMovie = (data) => {
+    return fetch(`${baseUrl}/movies`, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(data)
+    }).then(checkResponse);
+  }
+  // Удаление карточки
+  export const deleteMovie = (id) => {
+    return fetch(`${baseUrl}/movies/${id}`, {
+      method: "DELETE",
+      headers: headers,
+    }).then(checkResponse);
+  }
 

@@ -1,52 +1,44 @@
 import React, { useState, useEffect } from "react";
 
 
-function SearchForm({ onSubmit, onShortChange, saveData }) {
+function SearchForm({ onSubmit, onShortChange }) {
     const [search ,setSearch] = useState('');
     const [shortDuration, setShortDuration] = useState(false);
-
+    // console.log(shortDuration)
     useEffect(() => {
-        if (!saveData) {
-            return;
-        }
+    const storedSearchQuery = localStorage.getItem('searchQuery');
+    const storedShortDuration = localStorage.getItem('shortDuration');
 
-        const storedSearchQuery = localStorage.getItem('searchQuery');
-        const storedShortDuration = localStorage.getItem('shortDuration');
-        console.log(storedShortDuration === 'true');
+    if (storedSearchQuery) {
+      setSearch(storedSearchQuery);
+    }
 
-        if (storedSearchQuery || storedSearchQuery === '') {
-            onSubmit(storedSearchQuery);
-            setSearch(storedSearchQuery);
-        }
+    if (storedShortDuration) {
+      setShortDuration(storedShortDuration === 'true');
+    }
+  }, []);
 
-        if (storedShortDuration) {
-            setShortDuration(storedShortDuration === 'true');
-            onShortChange(storedShortDuration === 'true');
-        }
-    }, []);
+  useEffect(() => {
+    localStorage.setItem('searchQuery', search);
+  }, [search]);
 
+  useEffect(() => {
+    localStorage.setItem('shortDuration', JSON.stringify(shortDuration));
+  }, [shortDuration]);
+    
     const handleOnSubmit = (e) => {
         e.preventDefault();
         onSubmit(search);
     }
 
     const handleOnChange = (e) => {
-        const value = e.target.value;
-        setSearch(value);
-
-        if (saveData) {
-            localStorage.setItem('searchQuery', value);
-        }
+        setSearch(e.target.value);
     }
 
     const handleOnShortClick = () => {
         const newValue = !shortDuration;
         setShortDuration(newValue);
         onShortChange(newValue);
-
-        if (saveData) {
-            localStorage.setItem('shortDuration', newValue);
-        }
     }
 
     return (

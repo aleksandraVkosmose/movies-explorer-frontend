@@ -1,6 +1,6 @@
 import React from "react";
 
-function MoviesCard({ country, director, duration, year, description, image, trailerLink,nameRU, nameEN, movieId, thumbnail, isLiked, onLike, onUnLike, savedMovieId,  }) {
+function MoviesCard({ country, director, duration, year, description, image, trailerLink,nameRU, nameEN, movieId, thumbnail, isLiked, onLike, onUnLike, savedMovieId }) {
     const hours = Math.floor(duration / 60);
     const minutes = duration - hours * 60;
 

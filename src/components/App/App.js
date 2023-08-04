@@ -10,11 +10,10 @@ import SavedMovies from '../SavedMovies/SavedMovies';
 import Register from '../Auth/Register'
 import Login from '../Auth/Login';
 import PageNotFound from '../PageNotFound/PageNotFound';
-import mainApi from '../../utils/MainApi';
+import { register, authorize, getUser, getSavedMovies, saveMovie, deleteMovie  } from '../../utils/MainApi';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import Header from '../Header/Header';
 import moviesApi from "../../utils/MoviesApi";
-import filterMovies from "../../utils/filterMovies";
 
 function App() {
   const location = useLocation();
@@ -22,26 +21,25 @@ function App() {
   const [loginError, setLoginError] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
-  const [likedMovies, setLikedMovies] = useState([]);
-
-  const [search, setSearch] = useState('');
-  const [shortMovies, setShortMovies] = useState(false);
+  const [savedMovies, setSavedMovies] = useState([]);
   const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [searchResults, setSearchResults] = useState([]);
   const navigate = useNavigate();
+  console.log(isLoggedIn)
+ console.log(movies)
+ console.warn(savedMovies)
+  useEffect(() => {
+    checkToken();
+  }, [])
 
-  const handleOnRegister = useCallback(async ({ name, email, password }) => {
+  const handleOnRegister = (async ({ name, email, password }) => {
     try {
-      const data = await mainApi.register(name, email, password);
+      const data = await register(name, email, password);
       if (data) {
-        const loginData = await mainApi.authorize(email, password);
-        if (loginData.token) {
-          localStorage.setItem("jwt", loginData.token);
+        const data = await authorize(email, password);
+        if (data.token) {
+          localStorage.setItem("jwt", data.token);
           setIsLoggedIn(true);
-          setCurrentUser(loginData.user);
+          setCurrentUser(data.user);
           navigate("/movies");
         } else {
           setIsLoggedIn(false);
@@ -56,11 +54,11 @@ function App() {
         );
       }
     }
-  }, [navigate]);
+  });
 
-  const handleOnLogin = useCallback(async ({ email, password }) => {
+  const handleOnLogin = (async ({ email, password }) => {
     try {
-      const data = await mainApi.authorize(email, password);
+      const data = await authorize(email, password);
 
       if (data.token) {
         localStorage.setItem("jwt", data.token);
@@ -74,164 +72,58 @@ function App() {
         return setLoginError("При авторизации произошла ошибка");
       }
     }
-  }, [navigate]);
+  });
 
-  const checkToken = useCallback(async () => {
+  const checkToken = (async () => {
     try {
       const jwt = localStorage.getItem("jwt");
 
       if (!jwt) {
         return;
       }
-      const user = await mainApi.getUser(jwt);
+      const user = await getUser(jwt);
       setCurrentUser(user);
       setIsLoggedIn(true);
       navigate(location);
     } catch (e) {
       console.error(e);
     }
-  }, [location, navigate]);
+  });
 
 
-  const loadLiked = useCallback(async () => {
-    try {
-      const liked = await mainApi.getMovies();
-      setLikedMovies(liked);
-    } catch (e) {
-      console.error(e);
-    }
-  }, [])
-
-  const handleOnLikeClick = useCallback(
-    async ({
-      country,
-      director,
-      duration,
-      year,
-      description,
-      image,
-      trailerLink,
-      nameRU,
-      nameEN,
-      movieId,
-      thumbnail,
-    }) => {
-      try {
-        const isLiked = likedMovies.some((movie) => movie.movieId === movieId);
-
-        if (isLiked) {
-          await mainApi.unLikeMovie(movieId);
-
-          setLikedMovies((prevLikedMovies) =>
-            prevLikedMovies.filter((movie) => movie.movieId !== movieId)
-          );
-        } else {
-          await mainApi.likeMovie({
-            country,
-            director,
-            duration,
-            year,
-            description,
-            image,
-            trailerLink,
-            nameRU,
-            nameEN,
-            movieId,
-            thumbnail,
-          });
-
-          setLikedMovies((prevLikedMovies) => [
-            ...prevLikedMovies,
-            {
-              country,
-              director,
-              duration,
-              year,
-              description,
-              image,
-              trailerLink,
-              nameRU,
-              nameEN,
-              movieId,
-              thumbnail,
-            },
-          ]);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    [likedMovies]
-  );
-
-  const handleOnUnLikeClick = useCallback(async (id) => {
-    await mainApi.unLikeMovie(id)
-    await loadLiked();
-  }, [loadLiked])
+  useEffect (() => {
+    if(isLoggedIn){
+    Promise.all([moviesApi.getMovies(), getSavedMovies()])
+   .then((res) => {
+    setMovies(res[0])
+      setSavedMovies(res[1]);
+    }).catch((e) => console.error(e));
+    }}, [isLoggedIn])
 
 
-  useEffect(() => {
-    checkToken();
-  }, [])
 
-  const loadMovies = async () => {
-    try {
-      setError(false);
-      setIsLoading(true);
-      const response = await moviesApi.getMovies();
-      setMovies(response);
-      setIsLoaded(true);
-    } catch (error) {
-      setError(true);
-      console.error('error', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
+  // const handleOnLikeClick = useCallback(async ({ country, director, duration, year, description, image, trailerLink, nameRU, nameEN, movieId, thumbnail }) => {
+  //   await saveMovie({
+  //     country,
+  //     director,
+  //     duration,
+  //     year,
+  //     description,
+  //     image,
+  //     trailerLink,
+  //     nameRU,
+  //     nameEN,
+  //     movieId,
+  //     thumbnail
+  //   })
+  //   await loadLiked();
 
-  useEffect(() => {
-    loadLiked();
-    loadMovies();
-  }, [loadLiked])
+  // }, [loadLiked])
 
-  useEffect(() => {
-    const storedSearchResults = localStorage.getItem('searchResults');
-    if (storedSearchResults) {
-      setSearchResults(JSON.parse(storedSearchResults));
-    }
-  }, []);
-
-  useEffect(() => {
-    const filteredMovies = filterMovies(
-      movies.map(item => {
-        const savedMovie = likedMovies.find(likedMovie => likedMovie.movieId === item.id);
-        return {
-          country: item.country,
-          director: item.director,
-          duration: item.duration,
-          year: item.year,
-          description: item.description,
-          image: moviesApi._baseUrl + item.image.url,
-          thumbnail: moviesApi._baseUrl + item.image.formats.thumbnail.url,
-          trailerLink: item.trailerLink,
-          nameRU: item.nameRU,
-          nameEN: item.nameEN,
-          movieId: item.id,
-          savedMovieId: savedMovie ? savedMovie._id : null,
-          isLiked: !!savedMovie,
-        }
-      }),
-      shortMovies,
-      search
-    );
-
-    setSearchResults(filteredMovies);
-  }, [movies, likedMovies, shortMovies, search]);
-
-  useEffect(() => {
-    localStorage.setItem('searchResults', JSON.stringify(searchResults));
-    localStorage.setItem('shortMovies', JSON.stringify(shortMovies));
-  }, [searchResults, shortMovies]);
+  // const handleOnUnLikeClick = useCallback(async (id) => {
+  //   await deleteMovie(id)
+  //   await loadLiked();
+  // }, [loadLiked])
 
   return (
     <div className="page">
@@ -251,7 +143,8 @@ function App() {
             element={
               <ProtectedRoute
                 isLoggedIn={isLoggedIn}
-                element={<ProfileContainer />}
+                setIsLoggedIn={setIsLoggedIn}
+                element={ProfileContainer}
               ></ProtectedRoute>
             }
           >
@@ -261,18 +154,12 @@ function App() {
               <ProtectedRoute
                 isLoggedIn={isLoggedIn}
                 element={
-                  <Movies
-                    loadLiked={loadLiked}
-                    onLike={handleOnLikeClick}
-                    onUnLike={handleOnUnLikeClick}
-                    likedMovies={likedMovies}
-                    setSearch={setSearch}
-                    searchResults={searchResults}
-                    setShortMovies={setShortMovies}
-                    isLoading={isLoading}
-                    isLoaded={isLoaded}
-                    error={error}
-                  />
+                  Movies
+                    // loadLiked={loadLiked}
+                    // onLike={handleOnLikeClick}
+                    // onUnLike={handleOnUnLikeClick}
+
+                  
                 }
               ></ProtectedRoute>
             }>
@@ -281,12 +168,14 @@ function App() {
             element={
               <ProtectedRoute
                 isLoggedIn={isLoggedIn}
+                savedMovies={savedMovies}
                 element={
-                  <SavedMovies
-                    loadLiked={loadLiked}
-                    likedMovies={likedMovies}
-                    onUnLike={handleOnUnLikeClick}
-                  />
+                  
+                  SavedMovies
+                    // loadLiked={loadLiked}
+                    
+                    // onUnLike={handleOnUnLikeClick}
+                  
                 }
               ></ProtectedRoute>
             } />

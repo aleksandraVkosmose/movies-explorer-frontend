@@ -8,23 +8,23 @@ import filterMovies from "../../utils/filterMovies";
 function SavedMovies({ onLike, onUnLike, loadLiked, likedMovies }) {
     const [search, setSearch] = useState('');
     const [shortMovies, setShortMovies] = useState(false);
-    useEffect(() => {
-        loadLiked();
-    }, [])
+    // useEffect(() => {
+    //     loadLiked();
+    // }, [])
 
-    const list = useMemo(() => {
-        return filterMovies(likedMovies.map(item => ({
-            ...item,
-            isLiked: true,
-            savedMovieId: item._id,
-        })), shortMovies, search);
-    }, [likedMovies, search, shortMovies]);
+    // const list = useMemo(() => {
+    //     return filterMovies(likedMovies.map(item => ({
+    //         ...item,
+    //         isLiked: true,
+    //         savedMovieId: item._id,
+    //     })), shortMovies, search);
+    // }, [likedMovies, search, shortMovies]);
 
     return (
         <section className="movies">
             <Header />
             <SearchForm onSubmit={setSearch} onShortChange={setShortMovies} />
-            <SavedMoviesCardList list={list} onUnLike={onUnLike} onLike={onLike} />
+            <SavedMoviesCardList onUnLike={onUnLike} onLike={onLike} />
             <Footer />
         </section>
     )
