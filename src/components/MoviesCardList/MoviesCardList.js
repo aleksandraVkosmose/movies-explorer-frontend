@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
+import { useHandleResize } from "../../utils/Resize";
 
-const ITEMS_PER_PAGE = 12;
-
-function MoviesCardList({ list, onLike, onUnLike }) {
+function MoviesCardList({ list, onSave, onDelete }) {
+  const itemsPerPage = useHandleResize();
   const [currentPage, setCurrentPage] = useState(1);
 
   const handleOnMoreClick = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
+    setCurrentPage((prevPage) => prevPage + itemsPerPage.addItemsPerPage);
   };
 
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const startIndex = currentPage - 1;
+  const endIndex = itemsPerPage.itemsPerPage + startIndex;
+
   const paginatedList = list.slice(0, endIndex);
 
   return (
@@ -23,8 +24,8 @@ function MoviesCardList({ list, onLike, onUnLike }) {
           {paginatedList.map((movie, index) => (
             <MoviesCard
               {...movie}
-              onLike={onLike}
-              onUnLike={onUnLike}
+              onSave={onSave}
+              onDelete={onDelete}
               key={index}
             />
           ))}
@@ -32,10 +33,7 @@ function MoviesCardList({ list, onLike, onUnLike }) {
       )}
       {list.length > endIndex && (
         <div className="cardList__button">
-          <button
-            onClick={handleOnMoreClick}
-            className="movies__more-films"
-          >
+          <button onClick={handleOnMoreClick} className="movies__more-films">
             Ещё
           </button>
         </div>

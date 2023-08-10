@@ -85,9 +85,9 @@ color: greenyellow;
   cursor: pointer;
 }
 
-.profile__submit:hover {
+/* .profile__submit:hover {
   text-shadow: rgb(0, 255, 149) 1px 0 10px;
-}
+} */
 
 .profile__submit_disabled {
   margin-top: 220px;

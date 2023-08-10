@@ -1,18 +1,26 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import CurrentUserContext from '../../contexts/CurrentUserContext';
-import './App.css';
+import CurrentUserContext from "../../contexts/CurrentUserContext";
+import "./App.css";
 
-import Main from '../Main/Main';
-import Movies from '../Movies/Movies';
-import ProfileContainer from '../Profile/ProfileContainer';
-import SavedMovies from '../SavedMovies/SavedMovies';
-import Register from '../Auth/Register'
-import Login from '../Auth/Login';
-import PageNotFound from '../PageNotFound/PageNotFound';
-import { register, authorize, getUser, getSavedMovies, saveMovie, deleteMovie  } from '../../utils/MainApi';
-import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-import Header from '../Header/Header';
+import Main from "../Main/Main";
+import Movies from "../Movies/Movies";
+import ProfileContainer from "../Profile/ProfileContainer";
+import SavedMovies from "../SavedMovies/SavedMovies";
+import Register from "../Auth/Register";
+import Login from "../Auth/Login";
+import PageNotFound from "../PageNotFound/PageNotFound";
+import {
+  register,
+  authorize,
+  getUser,
+  getSavedMovies,
+  saveMovie,
+  deleteMovie,
+  editUser,
+} from "../../utils/MainApi";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+import Header from "../Header/Header";
 import moviesApi from "../../utils/MoviesApi";
 
 function App() {
@@ -23,15 +31,19 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [savedMovies, setSavedMovies] = useState([]);
   const [movies, setMovies] = useState([]);
+  const [editSuccess, setEditSuccess] = useState(false);
+  const [profileError, setProfileError] = useState("");
   const navigate = useNavigate();
-  console.log(isLoggedIn)
- console.log(movies)
- console.warn(savedMovies)
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+
   useEffect(() => {
     checkToken();
-  }, [])
+  }, []);
 
-  const handleOnRegister = (async ({ name, email, password }) => {
+  const handleOnRegister = async ({ name, email, password }) => {
     try {
       const data = await register(name, email, password);
       if (data) {
@@ -54,14 +66,15 @@ function App() {
         );
       }
     }
-  });
+  };
 
-  const handleOnLogin = (async ({ email, password }) => {
+  const handleOnLogin = async ({ email, password }) => {
     try {
       const data = await authorize(email, password);
 
       if (data.token) {
         localStorage.setItem("jwt", data.token);
+        setCurrentUser(data.user);
         setIsLoggedIn(true);
         navigate("/movies");
       }
@@ -72,115 +85,188 @@ function App() {
         return setLoginError("При авторизации произошла ошибка");
       }
     }
-  });
+  };
 
-  const checkToken = (async () => {
+  const checkToken = async () => {
     try {
-      const jwt = localStorage.getItem("jwt");
-
-      if (!jwt) {
-        return;
+      const user = await getUser();
+      if (user) {
+        setCurrentUser(user);
+        setIsLoggedIn(true);
+        navigate(location);
       }
-      const user = await getUser(jwt);
-      setCurrentUser(user);
-      setIsLoggedIn(true);
-      navigate(location);
     } catch (e) {
       console.error(e);
     }
+  };
+
+  const handleOnEditProfile = (async ({ email, name }) => {
+    try {
+      setEditSuccess(false); // Reset editSuccess to false at the start of the editing process
+      setProfileError(""); // Clear any previous errors before attempting to edit
+      const user = await editUser(name, email);
+      setCurrentUser(user);
+      setEditSuccess(true); // Set editSuccess to true upon successful editing
+      navigate("/profile");
+    } catch (error) {
+      console.error(error);
+
+      if (error.response && error.response.status === 409) {
+        setProfileError("Пользователь с таким email уже существует");
+      } else {
+        setProfileError("При обновлении профиля произошла ошибка");
+      }
+    }
   });
 
+  useEffect(() => {
+    if (isLoggedIn) {
+      setIsLoading(true);
+      setIsLoaded(false);
+      Promise.all([moviesApi.getMovies(), getSavedMovies()])
+        .then((res) => {
+          const movies = res[0];
+          const savedMovies = res[1];
 
-  useEffect (() => {
-    if(isLoggedIn){
-    Promise.all([moviesApi.getMovies(), getSavedMovies()])
-   .then((res) => {
-    setMovies(res[0])
-      setSavedMovies(res[1]);
-    }).catch((e) => console.error(e));
-    }}, [isLoggedIn])
+          const updatedMovies = movies.map((movie) => {
+            const savedMovie = savedMovies.find(
+              (saved) => saved.movieId === movie.id
+            );
+            if (savedMovie) {
+              return { ...movie, isLiked: true, key: movie.id };
+            }
+            return { ...movie, isLiked: false, key: movie.id };
+          });
 
+          const updatedSavedMovies = savedMovies.map((movie) => {
+            return { ...movie, isLiked: true, key: movie._id };
+          });
 
+          setMovies(updatedMovies);
+          setSavedMovies(updatedSavedMovies);
 
-  // const handleOnLikeClick = useCallback(async ({ country, director, duration, year, description, image, trailerLink, nameRU, nameEN, movieId, thumbnail }) => {
-  //   await saveMovie({
-  //     country,
-  //     director,
-  //     duration,
-  //     year,
-  //     description,
-  //     image,
-  //     trailerLink,
-  //     nameRU,
-  //     nameEN,
-  //     movieId,
-  //     thumbnail
-  //   })
-  //   await loadLiked();
+          setIsLoading(false);
+          setIsLoaded(true);
+        })
+        .catch((e) => {
+          setError(true);
+          console.error(e);
+        });
+    }
+  }, [isLoggedIn]);
 
-  // }, [loadLiked])
+  const handleSaveCard = async ({
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailerLink,
+    nameRU,
+    nameEN,
+    movieId,
+    thumbnail,
+  }) => {
+    const newSaveMovie = await saveMovie({
+      country,
+      director,
+      duration,
+      year,
+      description,
+      image,
+      trailerLink,
+      nameRU,
+      nameEN,
+      movieId,
+      thumbnail,
+    });
 
-  // const handleOnUnLikeClick = useCallback(async (id) => {
-  //   await deleteMovie(id)
-  //   await loadLiked();
-  // }, [loadLiked])
+    setSavedMovies((prevMovies) => [...prevMovies, newSaveMovie]);
+
+    setMovies((prevMovies) =>
+      prevMovies.map((movie) =>
+        movie.id === movieId ? { ...movie, isLiked: true } : movie
+      )
+    );
+  };
+
+  const handleDeleteCard = async (id) => {
+    const dMovie = savedMovies.find((savedMovie) => savedMovie.movieId === id);
+    setSavedMovies((prevMovies) =>
+      prevMovies.filter((movie) => movie._id !== dMovie._id)
+    );
+
+    await deleteMovie(dMovie._id);
+    setMovies((prevMovies) =>
+      prevMovies.map((movie) =>
+        movie.id === id ? { ...movie, isLiked: false } : movie
+      )
+    );
+  };
 
   return (
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
         <Header isLoggedIn={isLoggedIn} />
         <Routes>
-          <Route path="/"
-            element={<Main />}>
-          </Route>
-          <Route path="/signup"
-            element={<Register onRegister={handleOnRegister} registerError={registerError} />}>
-          </Route>
-          <Route path="/signin"
-            element={<Login onLogin={handleOnLogin} loginError={loginError} />}>
-          </Route>
-          <Route path="/profile"
+          <Route path="/" element={<Main />}></Route>
+          <Route
+            path="/signup"
+            element={
+              <Register
+                onRegister={handleOnRegister}
+                registerError={registerError}
+              />
+            }
+          />
+          <Route
+            path="/signin"
+            element={<Login onLogin={handleOnLogin} loginError={loginError} />}
+          />
+          <Route
+            path="/profile"
             element={
               <ProtectedRoute
                 isLoggedIn={isLoggedIn}
                 setIsLoggedIn={setIsLoggedIn}
                 element={ProfileContainer}
-              ></ProtectedRoute>
+                onEdit={handleOnEditProfile}
+                editSuccess={editSuccess}
+                profileError={profileError}
+                currentUser={currentUser}
+              />
             }
-          >
-          </Route>
-          <Route path="/movies"
+          />
+          <Route
+            path="/movies"
             element={
               <ProtectedRoute
                 isLoggedIn={isLoggedIn}
-                element={
-                  Movies
-                    // loadLiked={loadLiked}
-                    // onLike={handleOnLikeClick}
-                    // onUnLike={handleOnUnLikeClick}
-
-                  
-                }
-              ></ProtectedRoute>
-            }>
-          </Route>
-          <Route path="/saved-movies"
+                allMovies={movies}
+                savedMovies={savedMovies}
+                onSave={handleSaveCard}
+                onDelete={handleDeleteCard}
+                error={error}
+                isLoaded={isLoaded}
+                isLoading={isLoading}
+                element={Movies}
+              />
+            }
+          />
+          <Route
+            path="/saved-movies"
             element={
               <ProtectedRoute
                 isLoggedIn={isLoggedIn}
                 savedMovies={savedMovies}
-                element={
-                  
-                  SavedMovies
-                    // loadLiked={loadLiked}
-                    
-                    // onUnLike={handleOnUnLikeClick}
-                  
-                }
-              ></ProtectedRoute>
-            } />
-          <Route path="*"
-            element={<PageNotFound />} />
+                onDelete={handleDeleteCard}
+                isLoading={isLoading}
+                element={SavedMovies}
+              />
+            }
+          />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </CurrentUserContext.Provider>
     </div>

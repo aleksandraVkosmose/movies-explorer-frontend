@@ -1,14 +1,14 @@
 import React from "react";
 
-function MoviesCard({ country, director, duration, year, description, image, trailerLink,nameRU, nameEN, movieId, thumbnail, isLiked, onLike, onUnLike, savedMovieId }) {
+function MoviesCard({ country, director, duration, year, description, image, trailerLink,nameRU, nameEN, movieId, thumbnail, isLiked, onSave, onDelete }) {
     const hours = Math.floor(duration / 60);
     const minutes = duration - hours * 60;
 
     const handleOnLikeClick = () => {
         if (isLiked) {
-            onUnLike(savedMovieId);
+            onDelete(movieId);
         } else {
-            onLike({
+            onSave({
                 country,
                 director,
                 duration,

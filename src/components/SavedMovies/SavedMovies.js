@@ -1,33 +1,59 @@
-import React, {useEffect, useMemo, useState} from "react"
+import { useEffect, useState } from "react";
 import SearchForm from "../SearchForm/SearchForm";
-import SavedMoviesCardList from "../SavedMoviesCardList/SavedMoviesCardList"
+import SavedMoviesCardList from "../SavedMoviesCardList/SavedMoviesCardList";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import filterMovies from "../../utils/filterMovies";
 
-function SavedMovies({ onLike, onUnLike, loadLiked, likedMovies }) {
-    const [search, setSearch] = useState('');
-    const [shortMovies, setShortMovies] = useState(false);
-    // useEffect(() => {
-    //     loadLiked();
-    // }, [])
+function SavedMovies({ onDelete, savedMovies }) {
+  const [search, setSearch] = useState("");
+  const [shortSavedMovies, setShortSavedMovies] = useState(() => {
+    const shortFilms = localStorage.getItem("shortSavedMovies");
+    return shortFilms ? JSON.parse(shortFilms) : false;
+  });
+  const [searchSavedResults, setSearchSavedResults] = useState([]);
 
-    // const list = useMemo(() => {
-    //     return filterMovies(likedMovies.map(item => ({
-    //         ...item,
-    //         isLiked: true,
-    //         savedMovieId: item._id,
-    //     })), shortMovies, search);
-    // }, [likedMovies, search, shortMovies]);
+  useEffect(() => {
+    const storedSearchQuery = localStorage.getItem("searchQuerySavedMovies");
 
-    return (
-        <section className="movies">
-            <Header />
-            <SearchForm onSubmit={setSearch} onShortChange={setShortMovies} />
-            <SavedMoviesCardList onUnLike={onUnLike} onLike={onLike} />
-            <Footer />
-        </section>
-    )
+    if (storedSearchQuery) {
+      setSearch(storedSearchQuery);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("searchQuerySavedMovies", search);
+  }, [search]);
+
+  useEffect(() => {
+    localStorage.setItem("shortSavedMovies", JSON.stringify(shortSavedMovies));
+  }, [shortSavedMovies]);
+
+  useEffect(() => {
+    const filteredMovies = filterMovies(
+      savedMovies.map((item) => ({
+        ...item,
+        isLiked: true,
+      })),
+      shortSavedMovies,
+      search
+    );
+
+    setSearchSavedResults(filteredMovies);
+  }, [savedMovies, search, shortSavedMovies]);
+
+  return (
+    <section className="movies">
+      <Header />
+      <SearchForm
+        onSubmit={setSearch}
+        onShortChange={setShortSavedMovies}
+        shortMovies={shortSavedMovies}
+      />
+      <SavedMoviesCardList list={searchSavedResults} onDelete={onDelete} />
+      <Footer />
+    </section>
+  );
 }
 
 export default SavedMovies;
