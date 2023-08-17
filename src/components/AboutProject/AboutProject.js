@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 
 const AboutProject = forwardRef((props, ref) => {
   return (
-    <section className='project' id="aboutProject" ref={ref}>
+    <section className='project container' id="aboutProject" ref={ref}>
       <h2 className="project__subtitle subtitle_text">О проекте</h2>
       <ul className="project__about">
         <li className='project__about-list'>

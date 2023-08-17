@@ -1,28 +1,15 @@
-import validator from "validator";
-
 import {
-  regForSymbols,
-  regForName,
-  regForPassword,
   validationMessages,
 } from "./constants";
 
 export const isEmail = (email) => {
-  return !validator.isEmail(email) ? validationMessages.email : "";
+  return !(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/).test(email) || !email ? validationMessages.email : "";
 };
 
-export const isName = (string) => {
-  const name = String(string).toLowerCase();
-  const haveSymbols = regForSymbols.test(name);
-  const singleMatch = name.match(regForName);
-  return !singleMatch || singleMatch.length > 1 || haveSymbols
-    ? validationMessages.name
-    : "";
+export const isName = (name) => {
+  return !(/^[a-zA-Zа-яА-Я\- ]{2,}$/).test(name) || !name ? validationMessages.name : "";
 };
 
-export const isPassword = (string) => {
-  const password = String(string).toLowerCase();
-  const haveSymbols = regForSymbols.test(password);
-  const singleMatch = password.match(regForPassword).length;
-  return singleMatch > 1 || haveSymbols ? validationMessages.password : "";
+export const isPassword = (password) => {
+  return !(/^[A-Za-z0-9#?!@$ %^&*-]{3,30}$/).test((password)) || !password ? validationMessages.password : "";
 };

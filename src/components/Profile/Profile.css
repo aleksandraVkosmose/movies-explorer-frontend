@@ -1,6 +1,5 @@
 .profile {
-  max-width: 1280px;
-
+  max-width: 100%;
 }
 
 .profile__notification{
@@ -62,6 +61,13 @@ color: greenyellow;
   content: "E-mail";
 }
 
+.profile__input:-webkit-autofill,
+.profile__input:-webkit-autofill:focus,
+.profile__input:-webkit-autofill:hover {
+  -webkit-text-fill-color: #fff;
+  -webkit-box-shadow: 0 0 0px 40rem #202020 inset;
+}
+
 .profile__input {
   background-color: #202020;
   ;
@@ -85,15 +91,16 @@ color: greenyellow;
   cursor: pointer;
 }
 
-/* .profile__submit:hover {
+.profile__submit:hover {
   text-shadow: rgb(0, 255, 149) 1px 0 10px;
-} */
+}
 
 .profile__submit_disabled {
-  margin-top: 220px;
-  background-color: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.4);
+  opacity: 0.2;
+}
+.profile__submit_disabled:hover {
+  cursor: default;
+  text-shadow: none;
 }
 
 .profile__logout {
@@ -107,6 +114,10 @@ color: greenyellow;
 
 .profile__label-line {
   border-bottom: 1px solid rgb(42, 42, 42);
+}
+
+.profile__input-error {
+  color: red;
 }
 
 @media (max-width: 768px) {

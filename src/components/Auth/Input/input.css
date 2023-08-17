@@ -8,6 +8,13 @@
     outline: none;
 }
 
+.input:-webkit-autofill,
+.input:-webkit-autofill:focus,
+.input:-webkit-autofill:hover {
+    -webkit-text-fill-color: #fff;
+    -webkit-box-shadow: 0 0 0px 40rem #2F2F2F inset;
+}
+
 .input:focus {
     border-bottom: 1px solid #4285f4;
 }
@@ -39,3 +46,6 @@
     opacity: 1;
 }
 
+/* .color_error{
+    color: #ee3465; 
+} */

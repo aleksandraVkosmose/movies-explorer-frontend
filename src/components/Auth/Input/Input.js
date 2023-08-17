@@ -1,6 +1,6 @@
 import { inputPT } from "../../../utils/propTypes.js";
 
-function Input({ title, name, type, error }) {
+function Input({ title, name, type, error, inputClassName = '', labelClassName = '', value, onChange }) {
   const requiredProps =
     type === "text"
       ? { minLength: 2, maxLength: 30 }
@@ -8,16 +8,18 @@ function Input({ title, name, type, error }) {
         ? { minLength: 3 }
         : null;
 
+
   return (
-    <label className="input-label">
+    <label className={`${!labelClassName && "input-label"} ${labelClassName}`}>
       <p className="input-text">{title}</p>
       <input
+        value={value}
         name={name}
         type={type}
-        className={`input ${error && "color_error"}`}
-        required
+        className={`${!inputClassName && "input"} ${error && "color_error"} ${inputClassName}`}
+        onChange={onChange}
         {...requiredProps}
-      ></input>
+      />
       <span className={`input-error ${error && "input-error_visible"}`}>{error}</span>
     </label>
   );

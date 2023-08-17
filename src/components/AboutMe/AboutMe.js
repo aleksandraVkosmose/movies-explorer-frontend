@@ -4,7 +4,7 @@ import foto from "../../images/aboutMe.png"
 
 const AboutMe = forwardRef((props, ref) => {
   return (
-    <section className="about" id="student" ref={ref}>
+    <section className="about container" id="student" ref={ref}>
       <h2 className="about__subtitle subtitle_text">Студент</h2>
       <div className="about__info">
         <div className="about__info-description">

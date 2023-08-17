@@ -4,6 +4,7 @@ import { forwardRef } from "react";
 const Techs = forwardRef((props, ref) => {
     return (
         <section className='techs' id="techs" ref={ref}>
+                        <div className="container techs__container">
             <h2 className="techs__subtitle subtitle_text">Технологии</h2>
             <h1 className="techs__title text_title">7 технологий</h1>
             <p className="techs__text text">
@@ -18,6 +19,7 @@ const Techs = forwardRef((props, ref) => {
                 <li className="techs__list-item">Express.js</li>
                 <li className="techs__list-item">mongoDB</li>
             </ul>
+            </div>
         </section>
     )
 })

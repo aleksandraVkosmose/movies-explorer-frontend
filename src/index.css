@@ -21,3 +21,10 @@
 @import url(./components/Profile/Profile.css);
 @import url(./components/PageNotFound/PageNotFound.css);
 @import url(./components/SavedMoviesCard/SavedMoviesCard.css);
+
+.container {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1280px;
+    box-sizing: border-box;
+}

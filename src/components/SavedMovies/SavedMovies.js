@@ -7,27 +7,8 @@ import filterMovies from "../../utils/filterMovies";
 
 function SavedMovies({ onDelete, savedMovies }) {
   const [search, setSearch] = useState("");
-  const [shortSavedMovies, setShortSavedMovies] = useState(() => {
-    const shortFilms = localStorage.getItem("shortSavedMovies");
-    return shortFilms ? JSON.parse(shortFilms) : false;
-  });
+  const [shortSavedMovies, setShortSavedMovies] = useState(false);
   const [searchSavedResults, setSearchSavedResults] = useState([]);
-
-  useEffect(() => {
-    const storedSearchQuery = localStorage.getItem("searchQuerySavedMovies");
-
-    if (storedSearchQuery) {
-      setSearch(storedSearchQuery);
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("searchQuerySavedMovies", search);
-  }, [search]);
-
-  useEffect(() => {
-    localStorage.setItem("shortSavedMovies", JSON.stringify(shortSavedMovies));
-  }, [shortSavedMovies]);
 
   useEffect(() => {
     const filteredMovies = filterMovies(

@@ -1,9 +1,8 @@
 import React from "react";
-//import arrow from "../../images/arrow.svg"
 
 function Portfolio() {
     return (
-        <section className="portfolio">
+        <section className="portfolio container">
             <p className="portfolio__title">Портфолио</p>
             <div className="portfolio__list">
                 <div className="portfolio__list-item">

@@ -17,10 +17,11 @@ function Header({ isLoggedIn }) {
         location.pathname === "/profile" ||
         location.pathname === "/") &&
         isLoggedIn === true ? (
-        <header
+      <header
           className={`header ${location.pathname === "/" ? "header__theme_dark" : ""
-            }`}
-        >
+          }`}
+      >
+        <div className="header container header__container">
           <Link to="/">
             <img src={logo} alt="Логотип" className="header__logo" />
           </Link>
@@ -95,23 +96,28 @@ function Header({ isLoggedIn }) {
               )}
             </button>
           </nav>
-        </header>
+        </div>
+      </header>
       ) : (
         <></>
       )}
       {location.pathname === "/" && isLoggedIn === false ? (
         <header className="header header__theme_dark">
-          <Link to="/">
-            <img src={logo} alt="Логотип" className="header__logo" />
-          </Link>
-          <nav className="header__buttons">
-            <NavLink to="/signup" className="header__button header__btn-signup">
-              Регистрация
-            </NavLink>
-            <NavLink to="/signin" className="header__button header__btn-signin">
-              Войти
-            </NavLink>
-          </nav>
+          <div className="headercontainer header__container">
+          
+            <Link to="/">
+              <img src={logo} alt="Логотип" className="header__logo" />
+            </Link>
+            <nav className="header__buttons">
+              <NavLink to="/signup" className="header__button header__btn-signup">
+                Регистрация
+              </NavLink>
+              <NavLink to="/signin" className="header__button header__btn-signin">
+                Войти
+              </NavLink>
+            </nav>
+          </div>
+          
         </header>
       ) : (
         <></>

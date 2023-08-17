@@ -6,7 +6,7 @@ function ProfileContainer({setIsLoggedIn, isLoggedIn, currentUser, onEdit, editS
     const navigate = useNavigate();
     const handleOnLogout = (async () => {
       setIsLoggedIn(false);
-      navigate("/signin");
+      navigate("/");
       localStorage.clear()
     });
 

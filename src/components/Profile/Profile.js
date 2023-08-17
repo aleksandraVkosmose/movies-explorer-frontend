@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "../Header/Header";
+import {isEmail, isName} from "../../utils/validation";
 
 function Profile({ onLogout, onEdit, editSuccess, profileError, currentUser }) {
   const [inputValue, setInputValue] = useState({
@@ -8,24 +9,16 @@ function Profile({ onLogout, onEdit, editSuccess, profileError, currentUser }) {
   });
   const [isFormChanged, setIsFormChanged] = useState(false);
   const [inputError, setInputError] = useState({});
+  const [successEdit, setSuccessEdit] = useState(editSuccess);
+
+  const submitDisabled = Object.values(inputError).some(err => err) || !isFormChanged;
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-    console.log('subm')
     const editedData = {
       name: inputValue.name,
       email: inputValue.email,
     };
-
-    setInputError( {
-        email: (!editedData.email || !(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(editedData.email)) ? "Введите корректный email" : ""),
-        name: (!editedData.name || !(/^[a-zA-Zа-яА-Я ]+$/.test(inputValue) ? "Введите корректное имя" : "")),
-
-    });
-
-    if (!editedData.email || !editedData.name) {
-      return;
-    }
 
     await onEdit(editedData);
   };
@@ -34,58 +27,81 @@ function Profile({ onLogout, onEdit, editSuccess, profileError, currentUser }) {
     setIsFormChanged(inputValue.name !== currentUser?.name || inputValue.email !== currentUser?.email);
   }, [inputValue, currentUser]);
 
-  const handleOnChangeInput = (e) => {
-    const inputValue = e.target.value;
-    const inputName = e.target.name;
+  useEffect(() => {
+    setSuccessEdit(editSuccess);
+  }, [editSuccess])
 
-    setInputValue((prevState) => ({ ...prevState, [inputName]: inputValue}));
+  const handleOnChangeInput = (e) => {
+    const inputTargetValue = e.target.value;
+    const inputTargetName = e.target.name;
+
+    setSuccessEdit(false);
+
+    let error;
+
+    // eslint-disable-next-line default-case
+    switch (inputTargetName) {
+      case 'email': {
+        error = isEmail(inputTargetValue);
+        break;
+      }
+      case 'name': {
+        error = isName(inputTargetValue);
+        break;
+      }
+    }
+
+    setInputError((prevState) => {
+      return {...prevState, [inputTargetName]: error};
+      });
+
+    setInputValue((prevState) => ({ ...prevState, [inputTargetName]: inputTargetValue}));
   };
 
   return (
-    <section className="profile">
-      <Header />
-      <div className="profile__container">
-        <h1 className="profile__title text_title">Привет, {currentUser?.name}!</h1>
-        <form action="submit" className="profile__form" onSubmit={handleOnSubmit}>
-          <label className="profile__label profile__label-line">
-            <input
-              name="name"
-              type="text"
-              className="profile__input"
-              minLength={2}
-              value={inputValue.name}
-              onChange={handleOnChangeInput}
-              required
-            />
-            <span className={`input-error ${inputError.name && "input-error_visible"}`}>{inputError.name}</span>
-          </label>
-          <label className="profile__label">
-            <input
-              name="email"
-              type="text"
-              className="profile__input"
-              value={inputValue.email}
-              onChange={handleOnChangeInput}
-              required
-            />
-            <span className={`input-error ${inputError.email && "input-error_visible"}`}>{inputError.email}</span>
-          </label>
+      <section className="profile">
+        <Header />
+        <div className="profile__container">
+          <h1 className="profile__title text_title">Привет, {currentUser?.name}!</h1>
+          <form noValidate action="submit" className="profile__form" onSubmit={handleOnSubmit}>
+            <label className="profile__label profile__label-line">
+              <input
+                  name="name"
+                  type="text"
+                  className="profile__input"
+                  value={inputValue.name}
+                  onChange={handleOnChangeInput}
+              />
+              <span className={`input-error ${inputError.name && "input-error_visible"}`}>{inputError.name}</span>
+            </label>
+            <label className="profile__label">
+              <input
+                  name="email"
+                  type="text"
+                  className="profile__input"
+                  value={inputValue.email}
+                  onChange={handleOnChangeInput}
+              />
+              <span className={`input-error ${inputError.email && "input-error_visible"}`}>{inputError.email}</span>
+            </label>
 
-          <button
-            type="submit"
-            className="profile__submit"
-            disabled={!isFormChanged}
-          >
-            Редактировать
+            <button
+                type="submit"
+                className={`profile__submit ${
+                    !submitDisabled ? "" : "profile__submit_disabled"
+                }`}
+                disabled={submitDisabled}
+            >
+              Редактировать
+            </button>
+          </form>
+          {successEdit && <p className="profile__span">Успешно отредактировано!</p>}
+          {profileError && <p className="profile__error">{profileError}</p>}
+          <button className="profile__logout" type="button" onClick={onLogout}>
+            Выйти из аккаунта
           </button>
-        </form>
-        {editSuccess && <p className="profile__span">Успешно отредактировано!</p>}
-        {profileError && <p className="profile__error">{profileError}</p>}
-        <button className="profile__logout" type="button" onClick={onLogout}>
-          Выйти из аккаунта
-        </button>
-      </div>
-    </section>
+        </div>
+      </section>
   );
 }
 

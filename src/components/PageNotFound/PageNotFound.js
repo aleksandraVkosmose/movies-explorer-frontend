@@ -6,7 +6,7 @@ function PageNotFound() {
   const navigate = useNavigate();
 
   function handleClickBack() {
-    navigate(-1);
+    navigate(-2);
   }
   return (
     <main className="main">

@@ -193,11 +193,11 @@ function App() {
 
   const handleDeleteCard = async (id) => {
     const dMovie = savedMovies.find((savedMovie) => savedMovie.movieId === id);
-    setSavedMovies((prevMovies) =>
-      prevMovies.filter((movie) => movie._id !== dMovie._id)
-    );
-
+  
     await deleteMovie(dMovie._id);
+    setSavedMovies((prevMovies) =>
+        prevMovies.filter((movie) => movie._id !== dMovie._id)
+    );
     setMovies((prevMovies) =>
       prevMovies.map((movie) =>
         movie.id === id ? { ...movie, isLiked: false } : movie
