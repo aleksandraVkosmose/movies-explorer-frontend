@@ -1,0 +1,165 @@
+.searchform {
+  margin: 0 auto;
+  max-width: 1140px;
+  border-bottom: 1px solid #AAA;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.searchform__container {
+  display: flex;
+
+  flex-direction: column;
+  margin: 70px auto 44px;
+  width: 100%;
+}
+
+.searchform__main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  outline: #AAA solid 1.5px;
+  border-radius: 8px;
+}
+
+.searchform__input {
+  width: calc(100% - 165px);
+  border: 0;
+  padding: 25px 20px 25px 0;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 20px;
+  background-color: #202020;
+  color: #8B8B8B;
+  outline: 1px #AAA;
+  display: block;
+  cursor: pointer;
+}
+
+.searchform__button {
+  all: unset;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  width: 100px;
+  height: 52px;
+  margin: 10px 0;
+  color: white;
+  padding: 0;
+  border-radius: 5px;
+  background-color: #4285F4;
+  cursor: pointer;
+}
+
+.searchform__button:hover {
+  opacity: 0.699999988079071;
+}
+
+.searchform__addition {
+  display: flex;
+  align-items: center;
+  padding-top: 26px;
+}
+
+.searchform__checkbox {
+  display: none;
+}
+
+.searchform__label .searchform__checkbox {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.searchform__checkbox:checked+.searchform__text {
+  background-color: rgba(32, 32, 32, 1);
+}
+
+.searchform__checkbox:focus+.searchform__text {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+.searchform__checkbox:checked+.searchform__text:before {
+  -webkit-transform: translateX(16px);
+  -ms-transform: translateX(16px);
+  transform: translateX(16px);
+}
+
+.searchform__label {
+  position: relative;
+  display: inline-block;
+  width: 168px;
+  height: 20px;
+}
+
+.searchform__text {
+  max-width: 36px;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #202020;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 20px;
+}
+
+.searchform__text:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: #3DDC84;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+.searchform__text:after {
+  position: absolute;
+  content: "Короткометражки";
+  top: 0;
+  left: 50px;
+}
+
+@media screen and (max-width: 880px) {
+  .searchform {
+    max-width: 708px;
+    margin: auto;
+  }
+}
+
+@media screen and (max-width: 660px) {
+  .searchform {
+    max-width: 300px;
+    margin: auto;
+  }
+
+  .searchform__container {
+    margin-bottom: 64px;
+  }
+
+  .searchform__main {
+    justify-content: space-between;
+  }
+
+  .searchform__button {
+    width: 80px;
+    height: 44px;
+    font-size: 14px;
+    border: none;
+    margin-right: 12px;
+  }
+
+  .searchform__input {
+    font-size: 16px;
+    margin-left: 12px;
+  }
+}

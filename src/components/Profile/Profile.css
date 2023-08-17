@@ -1,0 +1,143 @@
+.profile {
+  max-width: 100%;
+}
+
+.profile__notification{
+color: greenyellow;
+}
+
+.profile__container {
+  display: flex;
+  max-width: 410px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 74px;
+}
+
+.profile__error {
+  display: block;
+  margin-bottom: 10px;
+  color: #FF004C;
+  font-weight: 400;
+  font-size: 12px;
+  text-align: center;
+}
+
+.profile__span{
+  margin-bottom: 10px;
+  color: #2d8d4a;
+  font-weight: 400;
+  font-size: 12px;
+  text-align: center;
+}
+
+.profile__title {
+  font-size: 24px;
+}
+
+.profile__form {
+  padding-top: 123px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+}
+
+.profile__label {
+  position: relative;
+  font-size: 11px;
+}
+
+.profile__label:first-child:before {
+  position: absolute;
+  content: "Имя";
+}
+
+.profile__label:nth-last-child(2):before {
+  position: absolute;
+  content: "E-mail";
+}
+
+.profile__input:-webkit-autofill,
+.profile__input:-webkit-autofill:focus,
+.profile__input:-webkit-autofill:hover {
+  -webkit-text-fill-color: #fff;
+  -webkit-box-shadow: 0 0 0px 40rem #202020 inset;
+}
+
+.profile__input {
+  background-color: #202020;
+  ;
+  border: none;
+  color: white;
+  text-align: end;
+  width: 100%;
+  outline: none;
+  padding-bottom: 10px;
+}
+
+.profile__input:focus {
+  border-bottom: 1px solid #4285f4;
+}
+
+.profile__submit {
+  margin-top: 180px;
+  background-color: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.profile__submit:hover {
+  text-shadow: rgb(0, 255, 149) 1px 0 10px;
+}
+
+.profile__submit_disabled {
+  opacity: 0.2;
+}
+.profile__submit_disabled:hover {
+  cursor: default;
+  text-shadow: none;
+}
+
+.profile__logout {
+  margin-top: 16px;
+  padding: 0;
+  color: rgba(238, 52, 101, 1);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.profile__label-line {
+  border-bottom: 1px solid rgb(42, 42, 42);
+}
+
+.profile__input-error {
+  color: red;
+}
+
+@media (max-width: 768px) {
+  .profile__form {
+    padding-top: 99px;
+    gap: 17px;
+  }
+
+  .profile__submit {
+    margin-top: 193px;
+    font-size: 13px;
+  }
+
+  .profile__logout {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 450px) {
+  .profile__container {
+    max-width: 240px;
+  }
+}
